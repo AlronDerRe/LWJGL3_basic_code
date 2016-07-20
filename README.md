@@ -2,4 +2,4 @@
 
 Les librairies sont dans le dossier Libs/LWJGL3-SlickUtil3.
 
-L'avancement se trouve dans lwjgl3 basic, le reste n'est pas à prendre en compte.
+L'avancement se trouve dans basic lwjgl3, le reste n'est pas à prendre en compte.
