@@ -2,8 +2,13 @@ package Graphics;
 
 import static utils.Buffers.*;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import static org.lwjgl.opengl.GL30.*;
 
 import maths.Matrix4f;
 import maths.Vector3f;
@@ -17,15 +22,18 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class Mesh {
 
-	private int draw_count = 0;
-	private int v_id = 0, c_id = 0, t_id = 0, n_id = 0;
+	List<Integer> vaos = new ArrayList<Integer>();
+	List<Integer> vbos = new ArrayList<Integer>();
+	
+	private int vaoID;
+	
+	private float[] verticesArray, colorsArray, textureCoordsArray, normalsArray;
+	private int draw_count;
 	
 	private boolean verticesB = false;
 	private boolean colorB = false;
 	private boolean textureB = false;
 	private boolean normalsB = false;
-	
-	private float[] verticesArray, colorsArray, textureCoordsArray, normalsArray;
 	
 	public Mesh(){
 		
@@ -65,75 +73,81 @@ public class Mesh {
 	
 	}
 	
+	public void cleanUpVaosAndVbos(){
+		for(int a = 0; a < vaos.size(); a++)
+			glDeleteVertexArrays(vaos.get(a));
+		
+		for(int a = 0; a < vbos.size(); a++)
+			glDeleteBuffers(vbos.get(a));
+		
+		System.out.println("Vao abd Vbos cleaned up !");
+	}
+	
+	private void createVAO(){
+		vaoID = glGenVertexArrays();
+		glBindVertexArray(vaoID);
+		vaos.add(vaoID);
+	}
+	
+	private void setDataInAttributeList(int attributeNumber, float[] data, int size){
+		
+		int vboID = glGenBuffers();
+		vbos.add(vboID);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(data), GL_STATIC_DRAW);
+		GL20.glVertexAttribPointer(attributeNumber, size, GL_FLOAT, false, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	}
+	
+	private void unbindVao(){
+		glBindVertexArray(0);
+	}
+	
 	public void updateBuffers(){
 		
+		createVAO();
+				
 		//Vertices BUFFER !!
 		if(this.verticesB){
-			if(v_id == 0){
-				v_id = glGenBuffers();
-			}
-			glBindBuffer(GL_ARRAY_BUFFER, v_id);
-			glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(this.verticesArray), GL_STATIC_DRAW);
-			
+			setDataInAttributeList(0, verticesArray, 3);
 		}
 		
 		//Color Buffer !
 		if(this.colorB){
-			if(c_id == 0)
-				c_id = glGenBuffers();
-			glBindBuffer(GL_ARRAY_BUFFER, c_id);
-			glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(this.colorsArray), GL_STATIC_DRAW);
+			setDataInAttributeList(1, colorsArray, 3);
 		}
 		
 		//Texture Buffer
 		if(this.textureB){
-			if(t_id == 0)
-				t_id = glGenBuffers();
-			glBindBuffer(GL_ARRAY_BUFFER, t_id);
-			glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(this.textureCoordsArray), GL_STATIC_DRAW);
+			setDataInAttributeList(2, textureCoordsArray, 2);
 		}
 		
 		//Normals Buffer
 		if(this.normalsB){
-			if(n_id == 0)
-				n_id = glGenBuffers();
-			glBindBuffer(GL_ARRAY_BUFFER, n_id);
-			glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(this.normalsArray), GL_STATIC_DRAW);
+			setDataInAttributeList(3, normalsArray, 3);
 		}
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		unbindVao();
 	}
 
 
 	public void render(){
+		glBindVertexArray(vaoID);
+		
 		if(this.verticesB)
 			glEnableVertexAttribArray(0);
 		if(this.colorB)
 			glEnableVertexAttribArray(1);
 		if(this.textureB)
 			glEnableVertexAttribArray(2);
+		if(this.normalsB)
+			glEnableVertexAttribArray(3);
 		
 		
-		if(this.verticesB){
-			glBindBuffer(GL_ARRAY_BUFFER, v_id);
-			GL20.glVertexAttribPointer(0,  3,GL_FLOAT, false, 0, 0);
-		}
-		if(this.colorB){
-			glBindBuffer(GL_ARRAY_BUFFER, c_id);
-			GL20.glVertexAttribPointer(1,  3,GL_FLOAT , false, 0, 0);
-		}
-		if(this.textureB){
-			glBindBuffer(GL_ARRAY_BUFFER, t_id);
-			GL20.glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
-		}
-		if(this.normalsB){
-			glBindBuffer(GL_ARRAY_BUFFER, n_id);
-			glNormalPointer(GL_FLOAT, 0, 0);
-		}
 		
 		glDrawArrays(GL_TRIANGLES, 0, this.draw_count);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		
 		if(this.verticesB)
@@ -142,6 +156,9 @@ public class Mesh {
 			glDisableVertexAttribArray(1);
 		if(this.textureB)
 			glDisableVertexAttribArray(2);
+		if(this.normalsB)
+			glDisableVertexAttribArray(3);
 		
+		glBindVertexArray(0);
 	}
 }

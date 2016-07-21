@@ -11,7 +11,7 @@ import Graphics.TextureLoader;
 
 public class Picture extends Entity{
 
-	private float vertices[] = 
+	private static float vertices[] = 
 		{
 			-0.5f, -0.2f, 0,
 			-0.5f, 0.2f, 0,
@@ -21,7 +21,7 @@ public class Picture extends Entity{
 			0.5f, 0.2f, 0f,
 			0.5f, -0.2f, 0f,
 		};
-		private float colors[] = 
+		private static float colors[] = 
 		{
 			0, 0, 0,
 			0.25f, 0.25f, 0.25f,
@@ -33,7 +33,7 @@ public class Picture extends Entity{
 			1, 1, 1
 			
 		};
-		private float tex[] = {
+		private static float tex[] = {
 				0, 1,
 				0, 0,
 				1, 0,
@@ -43,13 +43,13 @@ public class Picture extends Entity{
 				1, 1
 		};
 		
-	private int texture;
+	private static int texture;
 	
 	
 	public Picture(String path){
-		mesh.setVertices(vertices);
-		mesh.setColors(colors);
-		mesh.setTexturesCoords(tex);
+		mesh.setVertices(Picture.vertices);
+		mesh.setColors(Picture.colors);
+		//mesh.setTexturesCoords(tex);
 		mesh.updateBuffers();
 		
 		texture = TextureLoader.generateTexture(path);
@@ -57,7 +57,7 @@ public class Picture extends Entity{
 
 	@Override
 	public void render(Camera cam) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		
 		glUseProgram(ShaderHandler.getShader("3D").getID());
 		ShaderHandler.getShader("3D").setUniform("pm", cam.getPerspectiveMatrix());
@@ -71,7 +71,7 @@ public class Picture extends Entity{
 		
 		glUseProgram(0);
 		
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		//GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 	
 }

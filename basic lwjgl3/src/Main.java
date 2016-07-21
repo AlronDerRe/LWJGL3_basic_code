@@ -23,7 +23,7 @@ public class Main implements Runnable{
 
 
 	private Camera cam = new Camera();
-	private Picture pic;
+	private Picture pic, pic2;
 	
 	public static void main(String[] args) {
 		
@@ -75,9 +75,10 @@ public class Main implements Runnable{
 	    initShaders();
 	    
 		
-		pic = new Picture("test.png");	
-	    pic.move(new Vector3f(0, 0, -1));
-	//	pic.setScale(new Vector3f(0.2f, 0.2f, 1));	    
+		pic = new Picture("test.png");
+		pic2 = new Picture("Sarah.png");	
+	    pic2.rotate(new Vector3f(0, 0, 90));
+		
 
 
 	}
@@ -89,7 +90,7 @@ public class Main implements Runnable{
 		
 		//GL parameters
 		GL11.glClearColor(1.0f, 0.5f, 1.0f, 0f);
-		//GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_COLOR);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);			
 
@@ -104,8 +105,14 @@ public class Main implements Runnable{
 			update();
 			render();
 			
-			if(GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE)
+			if(GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE){
 				running = false;
+				pic.delete();
+				pic2.delete();
+			}
+				
+				
+				
 		}
 	}
 
@@ -116,10 +123,14 @@ public class Main implements Runnable{
 	
 	private void render(){
 		cam.updatePosition();
-
+		cam.rotate(new Vector3f(0, 0, 0.01f));
+		//pic.rotate(new Vector3f(0.01f, 0.01f, 0.01f));
+		cam.move(new Vector3f(0, 0, 0.0001f));
+		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		
 		pic.render(cam);
+		pic2.render(cam);
 			
 		GLFW.glfwSwapBuffers(window);
 	}

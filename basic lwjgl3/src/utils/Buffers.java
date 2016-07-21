@@ -8,8 +8,7 @@ public abstract class Buffers {
 
 		public static FloatBuffer createFloatBuffer(float[] data){
 		FloatBuffer fb = BufferUtils.createFloatBuffer(data.length);
-		for(int i = 0; i < data.length; i++)
-			fb.put(data[i]);
+		fb.put(data);
 		fb.flip();
 		return fb;
 	}

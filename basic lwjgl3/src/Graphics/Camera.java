@@ -49,9 +49,9 @@ public class Camera {
 		if(Keyboard.isKeyDown(Keyboard.KEY_Q))
 			nextPos.x -= 0.001f;*/
 		
-		this.position = nextPos;
-		translationMatrix = Matrix4f.getTranslationMatrix(new Vector3f(-position.x, -position.y, -position.z));
-		rotationMatrix = Matrix4f.getRotationMatrix(new Vector3f(-rotation.x, -rotation.y, -rotation.z));
+		this.position = this.nextPos;
+		this.translationMatrix = Matrix4f.getTranslationMatrix(new Vector3f(-this.position.x, -this.position.y, -this.position.z));
+		this.rotationMatrix = Matrix4f.getRotationMatrix(new Vector3f(-this.rotation.x, -this.rotation.y, -this.rotation.z));
 	}
 	
 	public void move(Vector3f translation){
