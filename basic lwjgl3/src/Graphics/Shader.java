@@ -43,7 +43,6 @@ public class Shader {
 		glBindAttribLocation(programID, 0, "in_Vertex");
 		glBindAttribLocation(programID, 1, "in_Color");
 		glBindAttribLocation(programID, 2, "in_Texture");
-		glBindAttribLocation(programID, 3, "in_Normal");
 		
 		glLinkProgram(programID);
 		if(glGetProgrami(programID, GL_LINK_STATUS) != 1)

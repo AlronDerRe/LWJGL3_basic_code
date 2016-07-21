@@ -9,6 +9,5 @@ out vec4 colorF;
 
 void main()
 {
-	colorF = //texture2D(sampler, tex_coord);
-	vec4(color, 1.0);
+	colorF = texture2D(sampler, tex_coord);
 }
