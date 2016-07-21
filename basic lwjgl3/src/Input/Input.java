@@ -21,10 +21,10 @@ public class Input extends GLFWKeyCallback{
 	}
 	
 	public static void resetKeyInfos(){
-		infos[0] = 0;
-		infos[1] = 0;
-		infos[2] = 0;
-		infos[3] = 0;
+		infos[0] = -1;
+		infos[1] = -1;
+		infos[2] = -1;
+		infos[3] = -1;
 	}
 	
 }

@@ -12,17 +12,23 @@ import Entities.Picture;
 import Graphics.Camera;
 import Graphics.ShaderHandler;
 import Input.Input;
+import Input.MouseButton;
+import Input.MousePos;
 
 public class Main implements Runnable{
 
+	//Variables indispensables
 	private Thread gameThread;
 	public boolean running = false;
 	
 	private long window;
 	private final int WIDTH = 800, HEIGHT = 600;
 
-	private Input keyCallBack = new Input();
+	private Input keyCallBack;
+	private MousePos mousePosCallBack;
+	private MouseButton mouseButtonCallBack;
 	
+	//Objets à afficher pour les test !
 	private Camera cam = new Camera();
 	private Picture pic, pic2;
 	
@@ -67,8 +73,9 @@ public class Main implements Runnable{
 		GLFW.glfwShowWindow(window);	
 		
 		
-		GLFW.glfwSetKeyCallback(window, (GLFWKeyCallback)keyCallBack);
-		
+		GLFW.glfwSetKeyCallback(window, this.keyCallBack = new Input());
+		GLFW.glfwSetCursorPosCallback(window, this.mousePosCallBack = new MousePos());
+		GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallBack = new MouseButton());
 
 		initOpenGlStates();
 		
@@ -120,8 +127,10 @@ public class Main implements Runnable{
 	
 	private void update(){
 		Input.resetKeyInfos();
+		MouseButton.resetMouseButtonInfo();
 		
 		GLFW.glfwPollEvents();
+		
 	}
 	
 	private void render(){
