@@ -1,11 +1,10 @@
 package Graphics;
 
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.BufferUtils.*;
+import static org.lwjgl.opengl.GL11.*;
 import java.nio.FloatBuffer;
+import java.util.Hashtable;
 
-import org.lwjgl.opengl.GL20;
-import org.lwjglx.BufferUtils;
 
 import maths.Matrix4f;
 import utils.Buffers;
@@ -17,8 +16,15 @@ public class Shader {
 	String vertFile, fragFile;
 	
 	
+	private Hashtable<String, Integer> uniformsLocations = new Hashtable<String, Integer>();
 	
-	public Shader(String name){
+	private static FloatBuffer fb;
+	
+	public Shader(){
+		
+	}
+	
+	public void create(String name){
 		programID = glCreateProgram();
 		
 		
@@ -54,25 +60,27 @@ public class Shader {
 			System.err.println(glGetProgramInfoLog(programID));
 	}
 	
+	public void cacheUniformsLocations(String[] names){
+		for(String str: names){
+			int loc = glGetUniformLocation(programID, str);
+			if(loc != -1)
+				uniformsLocations.put(str, loc);
+			else
+				System.out.println("Can't get location of uniform : " + str);
+		}
+	}
+	
 	public void setUniform(String name, int value){
-		int location = glGetUniformLocation(programID, name);
-		if(location != -1)
-			glUniform1i(location, value);
+		glUniform1i(uniformsLocations.get(name), value);
 	}
 	
 	public void setUniform(String name, float value){
-		int location = glGetUniformLocation(programID, name);
-		if(location != -1)
-			glUniform1f(location, value);
+		glUniform1f(uniformsLocations.get(name), value);
 	}
 	
-	public void setUniform(String name, Matrix4f matrix){
-		int location = glGetUniformLocation(programID, name);
-		if(location != -1){		
-			FloatBuffer matrixBuffer = Buffers.createFloatBuffer(matrix.elements);
-			glUniformMatrix4fv(location, false, matrixBuffer);
-		}
-		
+	public void setUniform(String name, Matrix4f matrix){	
+			fb = Buffers.createFloatBuffer(matrix.elements);		
+			glUniformMatrix4fv(uniformsLocations.get(name), false, fb);
 	}
 	
 	public int getID(){

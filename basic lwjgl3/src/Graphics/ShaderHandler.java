@@ -7,7 +7,10 @@ public class ShaderHandler {
 	private static Hashtable<String, Shader> shaderTable = new Hashtable<String, Shader>();
 	
 	public static void initShaders(){
-		Shader s = new Shader("3D");
+		Shader s = new Shader();
+		String[] ss = {"pm", "tm", "rm", "sm", "ctm", "crm"};
+		s.create("3D");
+		s.cacheUniformsLocations(ss);
 		shaderTable.put("3D", s);
 	}
 	
