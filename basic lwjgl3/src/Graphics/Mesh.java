@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -24,14 +25,15 @@ public class Mesh {
 	private int vaoID;
 	
 	private float[] verticesArray, colorsArray, textureCoordsArray, normalsArray;
+	private int[] indices;
 	private int draw_count;
 	
 	private boolean verticesB = false;
 	private boolean colorB = false;
 	private boolean textureB = false;
 	private boolean normalsB = false;
+	private boolean indiceB = false;
 	
-	private FloatBuffer floatBuffer;
 	
 	public Mesh(){
 		
@@ -70,6 +72,10 @@ public class Mesh {
 		}
 	
 	}
+	public void setIndices(int[] indices){
+		this.indices = indices;
+		this.indiceB= true;
+	}
 	
 	public void cleanUpVaosAndVbos(){
 		for(int a = 0; a < vaos.size(); a++)
@@ -97,15 +103,25 @@ public class Mesh {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	}
+	private void useIndices(){
+		int id = glGenBuffers();
+		vbos.add(id);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, createIntBuffer(this.indices), GL_STATIC_DRAW);
+		
+	}
 	
-	private void unbindVao(){
+ 	private void unbindVao(){
 		glBindVertexArray(0);
 	}
 	
 	public void updateBuffers(){
 		
 		createVAO();
-				
+		
+		if(this.indiceB)
+			useIndices();
+		
 		//Vertices BUFFER !!
 		if(this.verticesB){
 			setDataInAttributeList(0, verticesArray, 3);
@@ -143,8 +159,10 @@ public class Mesh {
 			glEnableVertexAttribArray(3);
 		
 		
-		
-		glDrawArrays(GL_TRIANGLES, 0, this.draw_count);
+		if(this.indiceB)
+			GL11.glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
+		else
+			glDrawArrays(GL_TRIANGLES, 0, this.draw_count);
 		
 		
 		

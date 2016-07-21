@@ -10,44 +10,28 @@ import Graphics.TextureLoader;
 
 public class Picture extends Entity{
 
-	private static float vertices[] = 
-		{
+	private static float[] vertices = {
 			-0.5f, -0.2f, 0,
-			-0.5f, 0.2f, 0,
+			0.5f, -0.2f, 0,
 			0.5f, 0.2f, 0,
-			
-			-0.5f, -0.2f, 0f,
-			0.5f, 0.2f, 0f,
-			0.5f, -0.2f, 0f,
-		};
-		private static float colors[] = 
-		{
-			0, 0, 0,
-			0.25f, 0.25f, 0.25f,
-			0.5f, 0.5f, 0.5f,
-			
-			
-			0, 0, 0,
-			0.5f, 0.5f, 0.5f,
-			1, 1, 1
-			
-		};
-		private static float tex[] = {
-				0, 1,
-				0, 0,
-				1, 0,
-				
-				0, 1,
-				1, 0,
-				1, 1
-		};
-		
+			-0.5f, 0.2f, 0
+	};
+	private static float tex[] = {
+			0, 1,
+			1, 1,
+			1, 0,
+			0, 0
+	};
+	private static int indice[] = {
+		0, 1, 3, 3, 1, 2	
+	};
+	
 	private int texture;
 	
 	public Picture(String path){
 		mesh.setVertices(Picture.vertices);
-		mesh.setColors(Picture.colors);
 		mesh.setTexturesCoords(tex);
+		mesh.setIndices(indice);
 		mesh.updateBuffers();
 		
 		TextureHandler TH = new TextureHandler();
