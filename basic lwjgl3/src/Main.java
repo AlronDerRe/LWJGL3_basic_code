@@ -11,6 +11,7 @@ import Entities.Picture;
 
 import Graphics.Camera;
 import Graphics.ShaderHandler;
+import Input.Input;
 
 public class Main implements Runnable{
 
@@ -20,7 +21,8 @@ public class Main implements Runnable{
 	private long window;
 	private final int WIDTH = 800, HEIGHT = 600;
 
-
+	private Input keyCallBack = new Input();
+	
 	private Camera cam = new Camera();
 	private Picture pic, pic2;
 	
@@ -41,6 +43,8 @@ public class Main implements Runnable{
 	}
 	
 	private void init(){
+		
+		
 		System.out.println("INITIALISATION !");
 	
 		if(GLFW.glfwInit() != GL11.GL_TRUE){
@@ -56,18 +60,16 @@ public class Main implements Runnable{
 		
 		ByteBuffer vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		
-		System.out.println();
-		
-		
-		
 		GLFW.glfwSetWindowPos(window, GLFWvidmode.width(vidmode)/2 - WIDTH/2, (GLFWvidmode.height(vidmode) - HEIGHT)/2);
 		
 		GLFW.glfwMakeContextCurrent(window);
 		
-		GLFW.glfwShowWindow(window);
+		GLFW.glfwShowWindow(window);	
 		
 		
+		GLFW.glfwSetKeyCallback(window, (GLFWKeyCallback)keyCallBack);
 		
+
 		initOpenGlStates();
 		
 		ShaderHandler.initShaders();
@@ -117,6 +119,8 @@ public class Main implements Runnable{
 
 	
 	private void update(){
+		Input.resetKeyInfos();
+		
 		GLFW.glfwPollEvents();
 	}
 	
