@@ -15,9 +15,9 @@ public abstract class Entity{
 	}
 	
 	public void move(Vector3f translation){
-		position.x += translation.x;
-		position.y += translation.y;
-		position.z += translation.z;
+		this.position.x += translation.x;
+		this.position.y += translation.y;
+		this.position.z += translation.z;
 		actualizeTransformationMatrix();
 	}
 	public void rotate(Vector3f rotation){
@@ -34,9 +34,9 @@ public abstract class Entity{
 	}
 	
 	private void actualizeTransformationMatrix(){
-		translationMatrix = Matrix4f.getTranslationMatrix(this.position);
-		rotationMatrix = Matrix4f.getRotationMatrix(this.rotation);
-		scaleMatrix = Matrix4f.getScaleMatrix(this.scale);
+		this.translationMatrix = Matrix4f.getTranslationMatrix(this.position);
+		this.rotationMatrix = Matrix4f.getRotationMatrix(this.rotation);
+		this.scaleMatrix = Matrix4f.getScaleMatrix(this.scale);
 	}
 	
 	public abstract void render(Camera cam);
@@ -63,4 +63,8 @@ public abstract class Entity{
 		return mesh;
 	}
 
+	public void delete(){
+		mesh.cleanUpVaosAndVbos();
+	}
+	
 }
