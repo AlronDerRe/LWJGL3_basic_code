@@ -2,22 +2,18 @@ package Graphics;
 
 import static utils.Buffers.*;
 
-
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import static org.lwjgl.opengl.GL30.*;
 
-import maths.Matrix4f;
-import maths.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.system.MemoryUtil.*;
 
 
 public class Mesh {
@@ -34,6 +30,8 @@ public class Mesh {
 	private boolean colorB = false;
 	private boolean textureB = false;
 	private boolean normalsB = false;
+	
+	private FloatBuffer floatBuffer;
 	
 	public Mesh(){
 		

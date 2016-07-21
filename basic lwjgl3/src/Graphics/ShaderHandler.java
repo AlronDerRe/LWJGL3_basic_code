@@ -8,7 +8,7 @@ public class ShaderHandler {
 	
 	public static void initShaders(){
 		Shader s = new Shader();
-		String[] ss = {"pm", "tm", "rm", "sm", "ctm", "crm"};
+		String[] ss = {"pm", "tm","ctm"};
 		s.create("3D");
 		s.cacheUniformsLocations(ss);
 		shaderTable.put("3D", s);
@@ -18,4 +18,7 @@ public class ShaderHandler {
 		return shaderTable.get(shaderName);
 	}
 	
+	public static void cleanUp(){
+		getShader("3D").cleanUp();
+	}
 }

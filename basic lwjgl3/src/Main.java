@@ -5,13 +5,12 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjglx.util.vector.Vector3f;
 
 import Entities.Picture;
-import static Graphics.ShaderHandler.*;
 
 import Graphics.Camera;
-import Graphics.Shader;
-import maths.Vector3f;
+import Graphics.ShaderHandler;
 
 public class Main implements Runnable{
 
@@ -71,13 +70,12 @@ public class Main implements Runnable{
 		
 		initOpenGlStates();
 		
+		ShaderHandler.initShaders();
 	    cam.init(70,  0.1f, 100.0f, (float)800/(float)600);
-	    initShaders();
-	    
-		
 		pic = new Picture("test.png");
-		pic2 = new Picture("Sarah.png");	
-	    pic2.rotate(new Vector3f(0, 0, 90));
+		pic2 = new Picture("Sarah.png");
+		pic2.move(new Vector3f(0, 0, -1));
+	   // pic2.rotate(new Vector3f(0, 0, 90));
 		
 
 
@@ -107,8 +105,9 @@ public class Main implements Runnable{
 			
 			if(GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE){
 				running = false;
-				pic.delete();
+				//pic.delete();
 				pic2.delete();
+				ShaderHandler.cleanUp();
 			}
 				
 				
@@ -123,13 +122,14 @@ public class Main implements Runnable{
 	
 	private void render(){
 		cam.updatePosition();
-		cam.rotate(new Vector3f(0, 0, 0.01f));
-		//pic.rotate(new Vector3f(0.01f, 0.01f, 0.01f));
+		//cam.rotate(new Vector3f(0, 0, 0.01f));
+		pic2.rotate(new Vector3f(0.1f, 0.0f, 0.01f));
 		cam.move(new Vector3f(0, 0, 0.0001f));
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		
 		pic.render(cam);
+		
 		pic2.render(cam);
 			
 		GLFW.glfwSwapBuffers(window);

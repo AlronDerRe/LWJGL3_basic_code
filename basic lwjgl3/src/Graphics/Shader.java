@@ -5,8 +5,10 @@ import static org.lwjgl.opengl.GL11.*;
 import java.nio.FloatBuffer;
 import java.util.Hashtable;
 
+import org.lwjgl.BufferUtils;
+import org.lwjglx.util.vector.Matrix4f;
 
-import maths.Matrix4f;
+//import maths.Matrix4f;
 import utils.Buffers;
 import utils.FonctionsUtiles;
 
@@ -18,7 +20,7 @@ public class Shader {
 	
 	private Hashtable<String, Integer> uniformsLocations = new Hashtable<String, Integer>();
 	
-	private static FloatBuffer fb;
+	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
 	public Shader(){
 		
@@ -70,6 +72,15 @@ public class Shader {
 		}
 	}
 	
+	public void cleanUp(){
+		glUseProgram(0);
+		glDetachShader(programID, vertID);
+		glDetachShader(programID, fragID);
+		glDeleteShader(vertID);
+		glDeleteShader(fragID);
+		glDeleteProgram(programID);
+	}
+	
 	public void setUniform(String name, int value){
 		glUniform1i(uniformsLocations.get(name), value);
 	}
@@ -79,8 +90,9 @@ public class Shader {
 	}
 	
 	public void setUniform(String name, Matrix4f matrix){	
-			fb = Buffers.createFloatBuffer(matrix.elements);		
-			glUniformMatrix4fv(uniformsLocations.get(name), false, fb);
+			matrix.store(matrixBuffer);
+			matrixBuffer.flip();
+			glUniformMatrix4fv(uniformsLocations.get(name), false, matrixBuffer);
 	}
 	
 	public int getID(){

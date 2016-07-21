@@ -1,9 +1,12 @@
 package Graphics;
 
 import org.lwjglx.input.Keyboard;
+import org.lwjglx.util.vector.Matrix4f;
+import org.lwjglx.util.vector.Vector3f;
+import org.lwjglx.util.vector.Vector4f;
 
-import maths.Matrix4f;
-import maths.Vector3f;
+import maths.Matrix;
+
 
 public class Camera {
 
@@ -13,19 +16,16 @@ public class Camera {
 	private float zNear, zFar, ratio;
 	
 	private Matrix4f perspectiveMatrix;
-	private Matrix4f translationMatrix, rotationMatrix;
+	private Matrix4f transformationMatrix;
 	
 	public Matrix4f getPerspectiveMatrix() {
 		return perspectiveMatrix;
 	}
 
-	public Matrix4f getTranslationMatrix() {
-		return translationMatrix;
+	public Matrix4f getTransformationMatrix() {
+		return transformationMatrix;
 	}
 
-	public Matrix4f getRotationMatrix() {
-		return rotationMatrix;
-	}
 
 	public Camera(){};
 	
@@ -35,7 +35,7 @@ public class Camera {
 		this.zNear = zNear;
 		this.zFar = zFar;
 		this.ratio = ratio;	
-		this.perspectiveMatrix = Matrix4f.getPerspectiveMatrix(FOV, this.zNear, this.zFar, this.ratio);
+		this.perspectiveMatrix = Matrix.perspectiveMatrix(FOV, this.zNear, this.zFar, ratio);
 	}
 	
 	public void updatePosition(){
@@ -50,8 +50,8 @@ public class Camera {
 			nextPos.x -= 0.001f;*/
 		
 		this.position = this.nextPos;
-		this.translationMatrix = Matrix4f.getTranslationMatrix(new Vector3f(-this.position.x, -this.position.y, -this.position.z));
-		this.rotationMatrix = Matrix4f.getRotationMatrix(new Vector3f(-this.rotation.x, -this.rotation.y, -this.rotation.z));
+		this.transformationMatrix = Matrix.transformationMatrix(position, this.rotation.x, this.rotation.y, this.rotation.z, new Vector3f(1, 1, 1));
+		this.transformationMatrix.invert();
 	}
 	
 	public void move(Vector3f translation){
