@@ -1,10 +1,14 @@
 package Graphics;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjglx.input.Keyboard;
 import org.lwjglx.util.vector.Matrix4f;
 import org.lwjglx.util.vector.Vector3f;
 import org.lwjglx.util.vector.Vector4f;
 
+import Input.MouseButton;
+
+import static Input.Input.*;
 import maths.Matrix;
 
 
@@ -17,6 +21,7 @@ public class Camera {
 	
 	private Matrix4f perspectiveMatrix;
 	private Matrix4f transformationMatrix;
+	
 	
 	public Matrix4f getPerspectiveMatrix() {
 		return perspectiveMatrix;
@@ -39,17 +44,26 @@ public class Camera {
 	}
 	
 	public void updatePosition(){
-	/*	nextPos = new Vector3f(0, 0, 0);
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-			nextPos.z += 0.001f;
-		if(Keyboard.isKeyDown(Keyboard.KEY_S))
-			nextPos.z -= 0.001f;
-		if(Keyboard.isKeyDown(Keyboard.KEY_D))
-			nextPos.x += 0.001f;
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q))
-			nextPos.x -= 0.001f;*/
+		/*if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_W)
+			this.position.z -= 1f;
+		if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_S)
+			this.position.z += 1f;
+		if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_D)
+			this.position.x += 1f;
+		if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_A)
+			this.position.x -= 1f;
+		if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_SPACE)
+			this.position.y += 1f;
+		if(getPressedKeyInfo()[0] == GLFW.GLFW_KEY_LEFT_SHIFT)
+			this.position.y -= 1f;
 		
-		this.position = this.nextPos;
+		if(MouseButton.getMouseButtonInfo()[0] == GLFW.GLFW_MOUSE_BUTTON_LEFT){
+			this.rotation.y += 1;
+		}
+		if(MouseButton.getMouseButtonInfo()[0] == GLFW.GLFW_MOUSE_BUTTON_RIGHT){
+			this.rotation.y -= 1;
+		}*/
+		
 		this.transformationMatrix = Matrix.transformationMatrix(position, this.rotation.x, this.rotation.y, this.rotation.z, new Vector3f(1, 1, 1));
 		this.transformationMatrix.invert();
 	}

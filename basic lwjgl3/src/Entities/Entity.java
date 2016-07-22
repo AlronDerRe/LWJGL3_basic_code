@@ -5,7 +5,7 @@ import org.lwjglx.util.vector.Vector3f;
 import org.lwjglx.util.vector.Vector4f;
 
 import Graphics.Camera;
-import Graphics.Mesh;
+import Graphics.Model.Mesh;
 import maths.Matrix;
 
 public abstract class Entity{

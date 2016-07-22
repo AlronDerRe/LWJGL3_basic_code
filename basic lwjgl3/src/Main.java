@@ -10,7 +10,9 @@ import org.lwjglx.util.vector.Vector3f;
 import Entities.Picture;
 
 import Graphics.Camera;
-import Graphics.ShaderHandler;
+import Graphics.Model.Mesh;
+import Graphics.Model.ObjModelLoader;
+import Graphics.Shader.ShaderHandler;
 import Input.Input;
 import Input.MouseButton;
 import Input.MousePos;
@@ -24,7 +26,7 @@ public class Main implements Runnable{
 	private long window;
 	private final int WIDTH = 800, HEIGHT = 600;
 
-	private Input keyCallBack;
+	private Input keyCallBack = new Input();
 	private MousePos mousePosCallBack;
 	private MouseButton mouseButtonCallBack;
 	
@@ -73,7 +75,7 @@ public class Main implements Runnable{
 		GLFW.glfwShowWindow(window);	
 		
 		
-		GLFW.glfwSetKeyCallback(window, this.keyCallBack = new Input());
+		GLFW.glfwSetKeyCallback(window, this.keyCallBack);
 		GLFW.glfwSetCursorPosCallback(window, this.mousePosCallBack = new MousePos());
 		GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallBack = new MouseButton());
 
@@ -81,13 +83,15 @@ public class Main implements Runnable{
 		
 		ShaderHandler.initShaders();
 	    cam.init(70,  0.1f, 100.0f, (float)800/(float)600);
-		pic = new Picture("test.png");
-		pic2 = new Picture("Sarah.png");
-		pic2.move(new Vector3f(0, 0, -1));
-	   // pic2.rotate(new Vector3f(0, 0, 90));
+	    cam.move(new Vector3f(0, 6, 10));
+	    cam.rotate(new Vector3f(-30, 0, 0));
+
+		pic = new Picture("wood.png");
+		//pic2 = new Picture("Sarah.png");
+		//pic2.move(new Vector3f(0, 0, -1));
 		
-
-
+		cam.updatePosition();
+		
 	}
 	
 	private void initOpenGlStates(){
@@ -114,8 +118,9 @@ public class Main implements Runnable{
 			
 			if(GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE){
 				running = false;
-				//pic.delete();
-				pic2.delete();
+				pic.delete();
+				//pic2.delete();
+			
 				ShaderHandler.cleanUp();
 			}
 				
@@ -136,14 +141,14 @@ public class Main implements Runnable{
 	private void render(){
 		cam.updatePosition();
 		//cam.rotate(new Vector3f(0, 0, 0.01f));
-		pic2.rotate(new Vector3f(0.1f, 0.0f, 0.01f));
-		cam.move(new Vector3f(0, 0, 0.0001f));
+		pic.rotate(new Vector3f(0.0f, 0.01f, 0.0f));
+		//cam.move(new Vector3f(0, 0, 0.001f));
 		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		
-		pic.render(cam);
+		//pic.render(cam);
 		
-		pic2.render(cam);
+		pic.render(cam);
 			
 		GLFW.glfwSwapBuffers(window);
 	}

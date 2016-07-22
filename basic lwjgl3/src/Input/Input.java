@@ -4,7 +4,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class Input extends GLFWKeyCallback{	
 	
-	private static int[] infos = new int[4];
+	private static int[] infos = {-1, -1, -1, -1};
 	
 	public Input(){}
 	

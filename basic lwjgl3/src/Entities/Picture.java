@@ -4,9 +4,10 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL20.*;
 
 import Graphics.Camera;
-import Graphics.ShaderHandler;
-import Graphics.TextureHandler;
-import Graphics.TextureLoader;
+import Graphics.Model.ObjModelLoader;
+import Graphics.Model.TextureHandler;
+import Graphics.Model.TextureLoader;
+import Graphics.Shader.ShaderHandler;
 
 public class Picture extends Entity{
 
@@ -29,10 +30,14 @@ public class Picture extends Entity{
 	private int texture;
 	
 	public Picture(String path){
-		mesh.setVertices(Picture.vertices);
+		/*mesh.setVertices(Picture.vertices);
 		mesh.setTexturesCoords(tex);
 		mesh.setIndices(indice);
-		mesh.updateBuffers();
+		mesh.updateBuffers();*/
+		
+		mesh = ObjModelLoader.loadObjModelIntoMesh("balancoire");
+		//mesh.updateBuffers();
+		
 		
 		TextureHandler TH = new TextureHandler();
 		if(TH.load(path)){
