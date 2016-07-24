@@ -7,11 +7,10 @@ public class ShaderHandler {
 	private static Hashtable<String, Shader> shaderTable = new Hashtable<String, Shader>();
 	
 	public static void initShaders(){
-		Shader s = new Shader();
-		String[] ss = {"pm", "tm","ctm"};
-		s.create("3D");
-		s.cacheUniformsLocations(ss);
+		Shader3D s = new Shader3D("3D");
 		shaderTable.put("3D", s);
+		ShaderPerPixelLightning s1 = new ShaderPerPixelLightning("PerPixelLightning");
+		shaderTable.put("PerPixelLightning", s1);
 	}
 	
 	public static Shader getShader(String shaderName){
@@ -20,5 +19,6 @@ public class ShaderHandler {
 	
 	public static void cleanUp(){
 		getShader("3D").cleanUp();
+		getShader("PerPixelLightning").cleanUp();
 	}
 }

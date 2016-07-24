@@ -111,20 +111,14 @@ public abstract class ObjModelLoader {
 					}				
 					if(normalD){
 						norms[i * 3 + 0] = normal.get(i).x;
-						norms[i * 3 + 1] = normal.get(i).x;
-						norms[i * 3 + 2] = normal.get(i).x;
+						norms[i * 3 + 1] = normal.get(i).y;
+						norms[i * 3 + 2] = normal.get(i).z;
 					}
 				}
 				
 				indices = new int[indice.size()];
 				for(int i = 0; i < indice.size(); i++)
 					indices[i] = indice.get(i);
-				
-				for(int i = 0; i < vert.length; i++){
-					System.out.println(vert[i] + " ");
-					if(i%3 == 2 && i != 0)
-						System.out.println(" ");
-				}
 					
 				
 				Mesh M = new Mesh();

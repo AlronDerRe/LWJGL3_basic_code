@@ -12,21 +12,21 @@ import org.lwjglx.util.vector.Matrix4f;
 import utils.Buffers;
 import utils.FonctionsUtiles;
 
-public class Shader {
+public abstract class Shader {
 
-	private int programID, vertID, fragID;
+	protected int programID, vertID, fragID;
 	String vertFile, fragFile;
+	protected String[] uniformLocations;
 	
+	protected Hashtable<String, Integer> uniformsLocations = new Hashtable<String, Integer>();
 	
-	private Hashtable<String, Integer> uniformsLocations = new Hashtable<String, Integer>();
+	private FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 	
-	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
-	
-	public Shader(){
-		
+	public Shader(String name){
+		create(name);
 	}
 	
-	public void create(String name){
+	private void create(String name){
 		programID = glCreateProgram();
 		
 		
@@ -48,10 +48,7 @@ public class Shader {
 		glAttachShader(programID, vertID);
 		glAttachShader(programID, fragID);
 		
-		glBindAttribLocation(programID, 0, "in_Vertex");
-		glBindAttribLocation(programID, 1, "in_Color");
-		glBindAttribLocation(programID, 2, "in_Texture");
-		glBindAttribLocation(programID, 3, "in_Normal");
+		bindAttribLocations();
 		
 		glLinkProgram(programID);
 		if(glGetProgrami(programID, GL_LINK_STATUS) != 1)
@@ -60,10 +57,13 @@ public class Shader {
 		glValidateProgram(programID);
 		if(glGetProgrami(programID, GL_VALIDATE_STATUS) != 1)
 			System.err.println(glGetProgramInfoLog(programID));
+		
+		setUniformNames();
+		cacheUniformsLocations();
 	}
 	
-	public void cacheUniformsLocations(String[] names){
-		for(String str: names){
+	public void cacheUniformsLocations(){
+		for(String str: uniformLocations){
 			int loc = glGetUniformLocation(programID, str);
 			if(loc != -1)
 				uniformsLocations.put(str, loc);
@@ -71,6 +71,9 @@ public class Shader {
 				System.out.println("Can't get location of uniform : " + str);
 		}
 	}
+	
+	protected abstract void setUniformNames();
+	protected abstract void bindAttribLocations();
 	
 	public void cleanUp(){
 		glUseProgram(0);
@@ -81,15 +84,19 @@ public class Shader {
 		glDeleteProgram(programID);
 	}
 	
-	public void setUniform(String name, int value){
+	public void setUniform1i(String name, int value){
 		glUniform1i(uniformsLocations.get(name), value);
 	}
 	
-	public void setUniform(String name, float value){
+	public void setUniform1f(String name, float value){
 		glUniform1f(uniformsLocations.get(name), value);
 	}
 	
-	public void setUniform(String name, Matrix4f matrix){	
+	public void setUniform3f(String name, float v1, float v2, float v3){
+		glUniform3f(uniformsLocations.get(name), v1, v2, v3);
+	}
+	
+	public void setUniformMatrix4f(String name, Matrix4f matrix){	
 			matrix.store(matrixBuffer);
 			matrixBuffer.flip();
 			glUniformMatrix4fv(uniformsLocations.get(name), false, matrixBuffer);

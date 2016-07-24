@@ -39,6 +39,8 @@ public class Mesh {
 		
 	}
 	
+	public boolean isAlreadyLoad(){return verticesB;}
+	
 	public void setVertices(float[] verticesArray){
 			this.verticesArray = verticesArray;
 			draw_count = this.verticesArray.length / 3;
@@ -122,24 +124,29 @@ public class Mesh {
 		if(this.indiceB)
 			useIndices();
 		
+		int count = 0;
 		//Vertices BUFFER !!
 		if(this.verticesB){
-			setDataInAttributeList(0, verticesArray, 3);
+			setDataInAttributeList(count, verticesArray, 3);
+			count++;
 		}
 		
 		//Color Buffer !
 		if(this.colorB){
-			setDataInAttributeList(1, colorsArray, 3);
+			setDataInAttributeList(count, colorsArray, 3);
+			count++;
 		}
 		
 		//Texture Buffer
 		if(this.textureB){
-			setDataInAttributeList(2, textureCoordsArray, 2);
+			setDataInAttributeList(count, textureCoordsArray, 2);
+			count++;
 		}
 		
 		//Normals Buffer
 		if(this.normalsB){
-			setDataInAttributeList(3, normalsArray, 3);
+			setDataInAttributeList(count, normalsArray, 3);
+			count++;
 		}
 		
 		unbindVao();
@@ -156,7 +163,7 @@ public class Mesh {
 		if(this.textureB)
 			glEnableVertexAttribArray(2);
 		if(this.normalsB)
-			glEnableVertexAttribArray(3);
+			glEnableVertexAttribArray(1);
 		
 		
 		if(this.indiceB)
@@ -173,7 +180,7 @@ public class Mesh {
 		if(this.textureB)
 			glDisableVertexAttribArray(2);
 		if(this.normalsB)
-			glDisableVertexAttribArray(3);
+			glDisableVertexAttribArray(1);
 		
 		glBindVertexArray(0);
 	}

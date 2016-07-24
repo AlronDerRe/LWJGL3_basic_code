@@ -4,13 +4,12 @@ import org.lwjglx.util.vector.Matrix4f;
 import org.lwjglx.util.vector.Vector3f;
 import org.lwjglx.util.vector.Vector4f;
 
-import Graphics.Camera;
 import Graphics.Model.Mesh;
 import maths.Matrix;
 
 public abstract class Entity{
 	
-	protected Mesh mesh = new Mesh();
+	protected static Mesh mesh = new Mesh();
 	protected Vector3f position = new Vector3f(0, 0, 0), rotation = new Vector3f(0, 0, 0), scale = new Vector3f(1, 1, 1);
 
 	protected Matrix4f transformationMatrix;
