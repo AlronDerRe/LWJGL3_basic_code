@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+
+import Graphics.Textures.Texture;
+
 import static org.lwjgl.opengl.GL30.*;
 
 
@@ -19,11 +22,38 @@ import static org.lwjgl.opengl.GL15.*;
 
 public class Mesh {
 
+	private Texture texture = new Texture();
+	
 	List<Integer> vaos = new ArrayList<Integer>();
 	List<Integer> vbos = new ArrayList<Integer>();
 	
 	private int vaoID;
 	
+	public boolean isVerticesB() {
+		return verticesB;
+	}
+
+	public boolean isColorB() {
+		return colorB;
+	}
+
+	public boolean isTextureB() {
+		return textureB;
+	}
+
+	public boolean isNormalsB() {
+		return normalsB;
+	}
+
+	public boolean isIndiceB() {
+		return indiceB;
+	}
+
+	public int getVaoID() {
+		return vaoID;
+	}
+
+
 	private float[] verticesArray, colorsArray, textureCoordsArray, normalsArray;
 	private int[] indices;
 	private int draw_count;
@@ -34,7 +64,24 @@ public class Mesh {
 	private boolean normalsB = false;
 	private boolean indiceB = false;
 	
+	private int v, c, t, n;
 	
+	public int getV() {
+		return v;
+	}
+
+	public int getC() {
+		return c;
+	}
+
+	public int getT() {
+		return t;
+	}
+
+	public int getN() {
+		return n;
+	}
+
 	public Mesh(){
 		
 	}
@@ -128,23 +175,27 @@ public class Mesh {
 		//Vertices BUFFER !!
 		if(this.verticesB){
 			setDataInAttributeList(count, verticesArray, 3);
+			v = count;
 			count++;
 		}
 		
 		//Color Buffer !
 		if(this.colorB){
 			setDataInAttributeList(count, colorsArray, 3);
+			c = count;
 			count++;
 		}
 		
 		//Texture Buffer
 		if(this.textureB){
+			t = count;
 			setDataInAttributeList(count, textureCoordsArray, 2);
 			count++;
 		}
 		
 		//Normals Buffer
 		if(this.normalsB){
+			n = count;
 			setDataInAttributeList(count, normalsArray, 3);
 			count++;
 		}
@@ -154,34 +205,19 @@ public class Mesh {
 
 
 	public void render(){
-		glBindVertexArray(vaoID);
-		
-		if(this.verticesB)
-			glEnableVertexAttribArray(0);
-		if(this.colorB)
-			glEnableVertexAttribArray(1);
-		if(this.textureB)
-			glEnableVertexAttribArray(2);
-		if(this.normalsB)
-			glEnableVertexAttribArray(1);
-		
-		
+	
 		if(this.indiceB)
 			GL11.glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
 		else
 			glDrawArrays(GL_TRIANGLES, 0, this.draw_count);
-		
-		
-		
-		if(this.verticesB)
-			glDisableVertexAttribArray(0);
-		if(this.colorB)
-			glDisableVertexAttribArray(1);
-		if(this.textureB)
-			glDisableVertexAttribArray(2);
-		if(this.normalsB)
-			glDisableVertexAttribArray(1);
-		
-		glBindVertexArray(0);
+
+	}
+
+	public Texture getTexture() {
+		return texture;
+	}
+
+	public void setTexture(Texture texture) {
+		this.texture = texture;
 	}
 }

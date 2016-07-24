@@ -11,13 +11,14 @@ public class ShaderPerPixelLightning extends Shader{
 	@Override
 	protected void bindAttribLocations() {
 		glBindAttribLocation(programID, 0, "in_Vertex");
-		glBindAttribLocation(programID, 1, "in_Normal");
+		glBindAttribLocation(programID, 1, "in_Texture");
+		glBindAttribLocation(programID, 2, "in_Normal");
 		
 	}
 	
 	@Override
 	protected void setUniformNames() {
-		String[] u = {"pm", "tm", "ctm", "lightPosition", "lightColour", "shineDamper", "reflectivity"};
+		String[] u = {"pm", "tm", "ctm", "lightPosition", "lightColour", "sampler"};
 		uniformLocations = u;
 	}
 

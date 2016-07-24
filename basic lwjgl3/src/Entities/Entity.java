@@ -5,6 +5,7 @@ import org.lwjglx.util.vector.Vector3f;
 import org.lwjglx.util.vector.Vector4f;
 
 import Graphics.Model.Mesh;
+import Graphics.Textures.Texture;
 import maths.Matrix;
 
 public abstract class Entity{
@@ -54,7 +55,7 @@ public abstract class Entity{
 	public Mesh getMesh() {
 		return mesh;
 	}
-
+	
 	public void delete(){
 		mesh.cleanUpVaosAndVbos();
 	}

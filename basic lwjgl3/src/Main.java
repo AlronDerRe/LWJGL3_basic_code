@@ -12,6 +12,7 @@ import Entities.Camera;
 import Entities.Dragon;
 import Graphics.Model.Mesh;
 import Graphics.Model.ObjModelLoader;
+import Graphics.Model.SuperRenderer;
 import Graphics.Shader.ShaderHandler;
 import Input.Input;
 import Input.MouseButton;
@@ -32,7 +33,10 @@ public class Main implements Runnable{
 	
 	//Objets à afficher pour les test !
 	private Camera cam = new Camera();
-	private Dragon drag1, drag2;
+	Dragon drags[] = new Dragon[3];
+	
+	SuperRenderer sr = new SuperRenderer();
+	
 	public static void main(String[] args) {
 		
 		Main game = new Main();	
@@ -88,11 +92,16 @@ public class Main implements Runnable{
 	    cam.move(new Vector3f(0, 6, 10));
 	    cam.rotate(new Vector3f(-30,0, 0));
 
-		drag1 = new Dragon();
-		drag2 = new Dragon();
-		//drag2.move(new Vector3f(0, 10, 6));
+		
 		
 		cam.updatePosition();
+		
+		sr.setCamera(cam);
+		for(int i = 0; i < drags.length; i++){
+			drags[i] = new Dragon();
+			sr.addEntity(drags[i]);
+			drags[i].rotate(new Vector3f(0, i * (365f/drags.length), 0));
+		}
 		
 	}
 	
@@ -122,8 +131,8 @@ public class Main implements Runnable{
 			
 			if(GLFW.glfwWindowShouldClose(window) == GL11.GL_TRUE){
 				running = false;
-				drag1.delete();
-				drag2.delete();
+				//drag1.delete();
+				//drag2.delete();
 			
 				ShaderHandler.cleanUp();
 			}
@@ -145,14 +154,22 @@ public class Main implements Runnable{
 	private void render(){
 		cam.updatePosition();
 		//cam.rotate(new Vector3f(0, 0, 0.01f));
-		drag1.rotate(new Vector3f(0.0f, 0.07f, 0.0f));
+		//drag1.rotate(new Vector3f(0.0f, 0.07f, 0.0f));
 		//cam.move(new Vector3f(0, 0, 0.001f));
-		//drag2.rotate(new Vector3f(0, -0.07f, 0));
-		drag2.move(new Vector3f(-0.0005f, 0 ,0));
+		//drag2.rotate(new Vector3f(0, -0.007f, 0));
+		//drag2.move(new Vector3f(-0.0005f, 0 ,0));
+		
+		for(int i = 0; i < drags.length; i++){
+		
+			drags[i].rotate(new Vector3f(0, 0.1f, 0));
+		}
+		
+		
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		
-		drag1.render(cam);
-		drag2.render(cam);
+		//drag1.render(cam);
+		//drag2.render(cam);
+		sr.render();
 		
 		GLFW.glfwSwapBuffers(window);
 	}
